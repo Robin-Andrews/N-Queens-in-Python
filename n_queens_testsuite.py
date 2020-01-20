@@ -3,7 +3,7 @@ Test suite for N-Queens Solution
 """
 
 import poc_simpletest
-from board_class import Board
+from n_queens import N_Queens
 
 def run_suite(game_class):
     """
@@ -35,27 +35,45 @@ def run_suite(game_class):
 
     # Test check_rows
     
-    suite.run_test(game.place_queen((1, 3)), False, "Test#2 place_queen() on occupied row.")
-    suite.run_test(game.place_queen((2, 3)), True, "Test#3 place_queen() on unoccupied row.")
+    suite.run_test(game.place_queen((1, 0)), False, "Test#2 place_queen() on occupied row.")
+    suite.run_test(game.place_queen((2, 0)), True, "Test#3 place_queen() on unoccupied row.")
     
     suite.run_test(str(game), """[0, 0, 0, 0, 0]
 [0, 0, 0, 0, 1]
-[0, 0, 0, 1, 0]
+[1, 0, 0, 0, 0]
 [0, 0, 0, 0, 0]
 [0, 0, 0, 0, 0]
-""", "Test#4 add queen at (1, 4)")
-    
+""", "Test#4 added queen at (2, 0)")
     
     
     # Test check_cols
     suite.run_test(game.place_queen((0, 4)), False, "Test#5 place_queen() on occupied column.")
-    suite.run_test(game.place_queen((4, 0)), True, "Test#6 place_queen() on unoccupied column.")
+    suite.run_test(game.place_queen((0, 1)), True, "Test#6 place_queen() on unoccupied column.")
+    
+    suite.run_test(str(game), """[0, 1, 0, 0, 0]
+[0, 0, 0, 0, 1]
+[1, 0, 0, 0, 0]
+[0, 0, 0, 0, 0]
+[0, 0, 0, 0, 0]
+""", "Test#7 added queen at (0, 1)")
+    
+    # Test check_diagonals()
+    
+    suite.run_test(game.place_queen((4, 1)), False, "Test#8 place_queen() on occupied diagonal.")
+    suite.run_test(game.place_queen((4, 3)), True, "Test#9 place_queen() on unoccupied diagonal.")
+    
+    suite.run_test(str(game), """[0, 1, 0, 0, 0]
+[0, 0, 0, 0, 1]
+[1, 0, 0, 0, 0]
+[0, 0, 0, 0, 0]
+[0, 0, 0, 1, 0]
+""", "Test#10 added queen at (4, 3)")
         
 
     suite.report_results()
     
     
-run_suite(Board)
+run_suite(N_Queens)
     
     
 
