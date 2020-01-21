@@ -12,9 +12,15 @@ class Square:
         self.has_queen = has_queen
 
     def get_has_queen(self):
+        """
+        Return True if this square has a queen, else False.
+        """
         return self.has_queen
 
     def set_has_queen(self, val):
+        """
+        Set the has_queen property for this square.
+        """
         self.has_queen = val
 
     def is_in(self, pos):

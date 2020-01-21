@@ -5,8 +5,9 @@ By Robin Andrews - info@compucademy.co.uk
 
 import n_queens_gui
 
+QUEEN = 1
 # Fixme: add constant for QUEEN (= 1) and replace throughout code.
-BOARD_SIZE = 10
+BOARD_SIZE = 5
 
 
 class NQueens:
@@ -19,7 +20,6 @@ class NQueens:
         Get size of board (square so only one value)
         """
         return self._size
-
 
     def get_board(self):
         """
@@ -48,6 +48,12 @@ class NQueens:
         For testing
         """
         self._board[pos[0]][pos[1]] = 1
+
+    def remove_queen(self, pos):
+        """
+        Set position on board to EMPTY value
+        """
+        self._board[pos[0]][pos[1]] = 0
 
     def is_legal_move(self, pos):
         """
@@ -118,4 +124,3 @@ class NQueens:
 
 
 n_queens_gui.run_gui(NQueens(BOARD_SIZE))
-
