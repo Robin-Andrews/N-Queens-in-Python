@@ -1,5 +1,7 @@
 """
-N-Queens GUI code.
+GUI code for the N-Queens Problem using Codeskulptor/SimpleGUICS2Pygame
+By Robin Andrews - info@compucademy.co.uk
+https://compucademy.co.uk/blog/
 """
 
 try:
@@ -19,7 +21,7 @@ except ImportError:
 queen_image = simplegui.load_image("https://compucademy.co.uk/assets/queen.PNG")
 queen_image_size = (queen_image.get_width(), queen_image.get_height())
 FRAME_SIZE = (400, 400)
-BOARD_SIZE = 20  # rows/cols
+BOARD_SIZE = 20  # Rows/cols
 
 
 class NQueensGUI:
@@ -33,15 +35,11 @@ class NQueensGUI:
         """
         # Game board
         self._game = game
-        print(self._game._board)
         self._size = game.get_size()
         self._square_size = FRAME_SIZE[0] // self._size
 
         # Set up frame
         self.setup_frame()
-
-        # Start new game
-        # self.newgame()
 
     def setup_frame(self):
         """
@@ -62,7 +60,7 @@ class NQueensGUI:
         self._frame.add_button("Increase board size", self.increase_board_size)
 
         self._frame.add_button("Decrease board size", self.decrease_board_size)
-        self._frame.add_label("") # For better spacing.
+        self._frame.add_label("")  # For better spacing.
         self._frame.add_button("Reset", self.reset)
         self._frame.add_label("")  # For better spacing.
         self._label = self._frame.add_label("")
@@ -92,7 +90,6 @@ class NQueensGUI:
             self._size_label.set_text(msg)
             self.reset()
 
-
     def start(self):
         """
         Start the GUI.
@@ -105,7 +102,6 @@ class NQueensGUI:
         """
         self._game.reset_board()
         self._label.set_text("")
-
 
     def draw(self, canvas):
         """
@@ -151,7 +147,6 @@ class NQueensGUI:
         if self._game.is_winning_position():
             success_sound.play()
             self._label.set_text("Well done. You have found a solution.")
-
 
     def get_grid_from_coords(self, position):
         """
