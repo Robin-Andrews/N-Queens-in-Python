@@ -13,7 +13,7 @@ BOARD_SIZE = 5
 class NQueens:
     def __init__(self, n):
         self._size = n
-        self._board = [[0] * self._size for _ in range(self._size)]
+        self.reset_board()
 
     def get_size(self):
         """
@@ -21,11 +21,33 @@ class NQueens:
         """
         return self._size
 
+    def reset_new_size(self, value):
+        """
+        Set size of board (square so only one value).
+        """
+        self._size = value
+        self.reset_board()
+
     def get_board(self):
         """
         get game board.
         """
         return self._board
+
+    def reset_board(self):
+        """
+        Restores board to empty.
+        """
+        self._board = [[0] * self._size for _ in range(self._size)]
+
+
+    def is_winning_position(self):
+        """
+        Checks whether all queens are placed by counting them. There should be as many as the board size.
+        """
+        num_queens = sum(row.count(1) for row in self._board)
+        return num_queens >= self._size
+
 
     def is_queen(self, pos):
         """
@@ -40,7 +62,7 @@ class NQueens:
         """
         if self.is_legal_move(pos):
             self._board[pos[0]][pos[1]] = 1
-            return True  # Maybe remove any return value after testing
+            return True  # Return value is useful for GUI - e.g trigger sound.
         return False
 
     def place_queen_no_checks(self, pos):

@@ -5,14 +5,18 @@ N-Queens GUI code.
 try:
     import simplegui
 
-    queen_image = simplegui.load_image("https://compucademy.co.uk/assets/queen.PNG")
+    collision_sound = simplegui.load_sound("https://compucademy.co.uk/assets/buzz3x.mp3")
+    success_sound = simplegui.load_sound("https://compucademy.co.uk/assets/treasure-found.mp3")
+
 except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
     simplegui.Frame._hide_status = True
     simplegui.Frame._keep_timers = False
-    queen_image = simplegui._load_local_image("queen.PNG")
+    collision_sound = simplegui.load_sound("https://compucademy.co.uk/assets/buzz3x.wav")
+    success_sound = simplegui.load_sound("https://compucademy.co.uk/assets/treasure-found.wav")
 
+queen_image = simplegui.load_image("https://compucademy.co.uk/assets/queen.PNG")
 queen_image_size = (queen_image.get_width(), queen_image.get_height())
 FRAME_SIZE = (400, 400)
 BOARD_SIZE = 20  # rows/cols
@@ -32,7 +36,6 @@ class NQueensGUI:
         print(self._game._board)
         self._size = game.get_size()
         self._square_size = FRAME_SIZE[0] // self._size
-        self._gui_board = []  # haven't decided whether this is a good idea.
 
         # Set up frame
         self.setup_frame()
@@ -51,8 +54,44 @@ class NQueensGUI:
         # Set handlers
         self._frame.set_draw_handler(self.draw)
         self._frame.set_mouseclick_handler(self.click)
-        # self._frame.add_button("Reset", self.newgame)
+        self._frame.add_label("Welcome to N-Queens")
+        self._frame.add_label("")  # For better spacing.
+        msg = "Current board size: " + str(self._size)
+        self._size_label = self._frame.add_label(msg)  # For better spacing.
+        self._frame.add_label("")  # For better spacing.
+        self._frame.add_button("Increase board size", self.increase_board_size)
+
+        self._frame.add_button("Decrease board size", self.decrease_board_size)
+        self._frame.add_label("") # For better spacing.
+        self._frame.add_button("Reset", self.reset)
+        self._frame.add_label("")  # For better spacing.
         self._label = self._frame.add_label("")
+
+    def increase_board_size(self):
+        """
+        Resets game with board one size larger.
+        """
+        new_size = self._game.get_size() + 1
+        self._game.reset_new_size(new_size)
+        self._size = self._game.get_size()
+        self._square_size = FRAME_SIZE[0] // self._size
+        msg = "Current board size: " + str(self._size)
+        self._size_label.set_text(msg)
+        self.reset()
+
+    def decrease_board_size(self):
+        """
+        Resets game with board one size larger.
+        """
+        if self._game.get_size() > 2:
+            new_size = self._game.get_size() - 1
+            self._game.reset_new_size(new_size)
+            self._size = self._game.get_size()
+            self._square_size = FRAME_SIZE[0] // self._size
+            msg = "Current board size: " + str(self._size)
+            self._size_label.set_text(msg)
+            self.reset()
+
 
     def start(self):
         """
@@ -60,21 +99,13 @@ class NQueensGUI:
         """
         self._frame.start()
 
-    # def reset(self):
-    #     """
-    #     Reset the board
-    #     """
-    #     self._board = self._game.get_board()
-    #     self._label.set_text("")
+    def reset(self):
+        """
+        Reset the board
+        """
+        self._game.reset_board()
+        self._label.set_text("")
 
-    def get_grid_from_coords(self, position):
-        """
-        Given coordinates on a canvas, gets the indices of
-        the grid.
-        """
-        posx, posy = position
-        return (posy // self._square_size,  # row
-                posx // self._square_size)  # col
 
     def draw(self, canvas):
         """
@@ -111,16 +142,25 @@ class NQueensGUI:
         if self._game.is_queen((i, j)):
             self._game.remove_queen((i, j))
         else:
-            self._game.place_queen((i, j))
+            if not self._game.place_queen((i, j)):
+                collision_sound.play()
+                self._label.set_text("Illegal move!")
+            else:
+                self._label.set_text("")
 
-    def game_over(self, winner):
-        """
-        Game over
-        """
-        pass
+        if self._game.is_winning_position():
+            success_sound.play()
+            self._label.set_text("Well done. You have found a solution.")
 
-        # Game is no longer in progress
-        self._inprogress = False
+
+    def get_grid_from_coords(self, position):
+        """
+        Given coordinates on a canvas, gets the indices of
+        the grid.
+        """
+        pos_x, pos_y = position
+        return (pos_y // self._square_size,  # row
+                pos_x // self._square_size)  # col
 
 
 def run_gui(game):
@@ -129,4 +169,3 @@ def run_gui(game):
     """
     gui = NQueensGUI(game)
     gui.start()
-
