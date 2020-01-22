@@ -7,7 +7,7 @@ https://compucademy.co.uk/blog/
 try:
     import n_queens_gui
 except ImportError:
-    import user47_ulGelU3QcD_0 as n_queens_gui
+    import user47_EF0SvZ5pFJwZRzj_0 as n_queens_gui
 
 QUEEN = 1
 EMPTY_SPOT = 0

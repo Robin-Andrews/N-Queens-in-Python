@@ -137,6 +137,7 @@ class NQueensGUI:
         i, j = self.get_grid_from_coords(pos)
         if self._game.is_queen((i, j)):
             self._game.remove_queen((i, j))
+            self._label.set_text("")
         else:
             if not self._game.place_queen((i, j)):
                 collision_sound.play()
